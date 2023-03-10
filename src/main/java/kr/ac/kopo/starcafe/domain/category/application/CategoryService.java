@@ -25,7 +25,6 @@ public class CategoryService {
 
     public SimpleCategoryResponse create(final Category category) {
         Category savedCategory = categoryRepository.save(category);
-
         Category findCategory = categoryRepository.findById(savedCategory.getId()).orElseThrow(RuntimeException::new);
 
         ModelMapper mapper = customModelMapper.standardMapper();
@@ -35,10 +34,10 @@ public class CategoryService {
 
     public SimpleCategoryResponse modified(final CategoryModifiedRequest request) {
         Long id = request.getId();
-
         Category findCategory = categoryRepository.findById(id).orElseThrow(
                 () -> new MemberNotFoundException("찾을 수 없는 멤버")
         );
+
         findCategory.modified(request);
 
         ModelMapper mapper = customModelMapper.standardMapper();
