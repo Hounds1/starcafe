@@ -52,6 +52,7 @@ public class CategoryService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public SimpleCategoryResponse findOne(final String name) {
         Category findCategory = categoryRepository.findByName(name).orElseThrow(RuntimeException::new);
         ModelMapper mapper = customModelMapper.standardMapper();
@@ -59,6 +60,7 @@ public class CategoryService {
         return mapper.map(findCategory, SimpleCategoryResponse.class);
     }
 
+    @Transactional(readOnly = true)
     public List<SimpleCategoryResponse> findAll() {
         List<Category> all = categoryRepository.findAll();
         ModelMapper mapper = customModelMapper.standardMapper();

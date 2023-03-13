@@ -23,7 +23,7 @@ import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
 @Transactional
-public class MockCategoryServiceTest {
+class MockCategoryServiceTest {
 
     @MockBean(name = "mockCategoryRepository")
     private MockCategoryRepository mockCategoryRepository;

@@ -7,6 +7,7 @@ import kr.ac.kopo.starcafe.domain.category.dto.*;
 import kr.ac.kopo.starcafe.domain.category.model.Category;
 import kr.ac.kopo.starcafe.domain.category.util.GetCategoryInfo;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -40,6 +41,7 @@ class CategoryControllerTest {
     }
 
     @Test
+    @DisplayName(value = "생성 요청")
     void createRequestTest() throws Exception {
         CategoryCreateRequest createRequest = GetCategoryInfo.getCreateRequest();
         ObjectMapper om = new ObjectMapper();
@@ -55,6 +57,7 @@ class CategoryControllerTest {
     }
 
     @Test
+    @DisplayName(value = "수정 요청")
     void ModifiedRequestTest() throws Exception{
 
         final Long id = 1L;
@@ -77,6 +80,7 @@ class CategoryControllerTest {
     }
 
     @Test
+    @DisplayName(value = "전체 조회")
     void findAllTest() throws Exception{
         mockMvc.perform(get(BASE_URI + "/all"))
                 .andExpect(status().isOk())
@@ -84,6 +88,7 @@ class CategoryControllerTest {
     }
 
     @Test
+    @DisplayName(value = "단일 조회")
     void findOneTest() throws Exception{
         final String INIT_NAME = "initName";
 

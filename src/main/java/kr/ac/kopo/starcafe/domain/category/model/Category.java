@@ -1,11 +1,14 @@
 package kr.ac.kopo.starcafe.domain.category.model;
 
 import kr.ac.kopo.starcafe.domain.category.dto.CategoryModifiedRequest;
+import kr.ac.kopo.starcafe.domain.product.model.Product;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,6 +29,9 @@ public class Category {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate lastModifiedDate;
+
+    @OneToMany(mappedBy = "category")
+    private List<Product> products = new ArrayList<>();
 
     /**
      * 비즈니스 로직
