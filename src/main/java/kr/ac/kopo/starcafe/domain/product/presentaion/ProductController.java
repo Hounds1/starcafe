@@ -43,8 +43,6 @@ public class ProductController {
     @GetMapping("/products")
     public ResponseEntity<SimpleProductResponse> findOne(@RequestParam(value = "id") final Long id) {
         return ResponseEntity.ok().body(productService.findOne(id));
-
-
     }
 
     @GetMapping("/products/all")

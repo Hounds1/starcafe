@@ -1,7 +1,6 @@
 package kr.ac.kopo.starcafe.domain.product.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import kr.ac.kopo.starcafe.domain.category.model.Category;
 import kr.ac.kopo.starcafe.domain.product.model.Product;
 import lombok.*;
 

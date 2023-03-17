@@ -2,13 +2,9 @@ package kr.ac.kopo.starcafe.domain.product.presentaion;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import kr.ac.kopo.starcafe.domain.category.application.CategoryService;
-import kr.ac.kopo.starcafe.domain.category.dto.CategoryCreateRequest;
-import kr.ac.kopo.starcafe.domain.category.model.Category;
-import kr.ac.kopo.starcafe.domain.category.model.repository.CategoryRepository;
-import kr.ac.kopo.starcafe.domain.category.util.GetCategoryInfo;
 import kr.ac.kopo.starcafe.domain.product.application.ProductService;
 import kr.ac.kopo.starcafe.domain.product.model.Product;
+import kr.ac.kopo.starcafe.domain.product.model.dto.Category;
 import kr.ac.kopo.starcafe.domain.product.model.dto.ProductCreateRequest;
 import kr.ac.kopo.starcafe.domain.product.model.dto.ProductModifiedRequest;
 import kr.ac.kopo.starcafe.domain.product.model.repository.ProductRepository;
@@ -37,9 +33,6 @@ class ProductControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
     private ProductRepository productRepository;
 
     private static final String INIT_NAME = "initName";
@@ -48,12 +41,10 @@ class ProductControllerTest {
     @Test
     @DisplayName(value = "생성 요청")
     void mvcCreateTest() throws Exception {
-        CategoryCreateRequest createRequest = GetCategoryInfo.getCreateRequest();
-        Category savedCategory = categoryRepository.save(createRequest.toEntity());
 
         ProductCreateRequest req = ProductCreateRequest.builder()
                 .name(INIT_NAME)
-                .category(savedCategory)
+                .category(Category.ETC)
                 .build();
 
         ObjectMapper om = new ObjectMapper();
@@ -70,12 +61,10 @@ class ProductControllerTest {
     @Test
     @DisplayName(value = "수정 요청")
     void mvcModifiedTest() throws Exception {
-        CategoryCreateRequest createRequest = GetCategoryInfo.getCreateRequest();
-        Category savedCategory = categoryRepository.save(createRequest.toEntity());
 
         ProductCreateRequest req = ProductCreateRequest.builder()
                 .name(INIT_NAME)
-                .category(savedCategory)
+                .category(Category.ETC)
                 .build();
 
         Product savedProduct = productRepository.save(req.toEntity());
@@ -83,7 +72,7 @@ class ProductControllerTest {
         ProductModifiedRequest modReq = ProductModifiedRequest.builder()
                 .id(savedProduct.getId())
                 .name(MODIFIED_NAME)
-                .category(savedCategory)
+                .category(Category.COFFEE)
                 .build();
 
         ObjectMapper om = new ObjectMapper();
@@ -102,12 +91,9 @@ class ProductControllerTest {
     @DisplayName(value = "단건 조회")
     void mvcFindOneTest() throws Exception{
 
-        CategoryCreateRequest createRequest = GetCategoryInfo.getCreateRequest();
-        Category savedCategory = categoryRepository.save(createRequest.toEntity());
-
         ProductCreateRequest req = ProductCreateRequest.builder()
                 .name(INIT_NAME)
-                .category(savedCategory)
+                .category(Category.ETC)
                 .build();
 
         productRepository.save(req.toEntity());
@@ -121,23 +107,21 @@ class ProductControllerTest {
     @Transactional(readOnly = true)
     @DisplayName(value = "전체 조회")
     void mvcFindAllTest() throws Exception{
-        CategoryCreateRequest createRequest = GetCategoryInfo.getCreateRequest();
-        Category savedCategory = categoryRepository.save(createRequest.toEntity());
 
         ProductCreateRequest req = ProductCreateRequest.builder()
                 .name(INIT_NAME)
-                .category(savedCategory)
+                .category(Category.COFFEE)
                 .build();
 
         ProductCreateRequest req2 = ProductCreateRequest.builder()
                 .name("INIT_NAME")
-                .category(savedCategory)
+                .category(Category.BEVERAGE)
                 .build();
 
         productRepository.save(req.toEntity());
         productRepository.save(req2.toEntity());
 
-        mockMvc.perform(get("/api/products/all"))
+        mockMvc.perform(get("/api/products/all?page=0"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

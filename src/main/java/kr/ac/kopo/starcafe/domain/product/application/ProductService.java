@@ -1,6 +1,5 @@
 package kr.ac.kopo.starcafe.domain.product.application;
 
-import kr.ac.kopo.starcafe.domain.category.model.Category;
 import kr.ac.kopo.starcafe.domain.product.model.Product;
 import kr.ac.kopo.starcafe.domain.product.model.dto.ProductModifiedRequest;
 import kr.ac.kopo.starcafe.domain.product.model.dto.SimpleProductResponse;

@@ -1,6 +1,5 @@
 package kr.ac.kopo.starcafe.domain.product.model.dto;
 
-import kr.ac.kopo.starcafe.domain.category.model.Category;
 import kr.ac.kopo.starcafe.domain.product.model.Product;
 import lombok.Builder;
 import lombok.Data;

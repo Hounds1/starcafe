@@ -1,9 +1,7 @@
 package kr.ac.kopo.starcafe.domain.product.application;
 
-import kr.ac.kopo.starcafe.domain.category.dto.CategoryCreateRequest;
-import kr.ac.kopo.starcafe.domain.category.model.Category;
-import kr.ac.kopo.starcafe.domain.category.util.GetCategoryInfo;
 import kr.ac.kopo.starcafe.domain.product.model.Product;
+import kr.ac.kopo.starcafe.domain.product.model.dto.Category;
 import kr.ac.kopo.starcafe.domain.product.model.dto.ProductCreateRequest;
 import kr.ac.kopo.starcafe.domain.product.model.dto.ProductModifiedRequest;
 import kr.ac.kopo.starcafe.domain.product.repository.MockProductRepository;
@@ -12,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
+@Transactional
 class MockProductServiceTest {
 
     @MockBean
@@ -29,12 +29,10 @@ class MockProductServiceTest {
     @Test
     @DisplayName(value = "생성 요청")
     void createProductTest() {
-        CategoryCreateRequest createRequest = GetCategoryInfo.getCreateRequest();
-        Category category = createRequest.toEntity();
 
         ProductCreateRequest request = ProductCreateRequest.builder()
                 .name("initName")
-                .category(category)
+                .category(Category.ETC)
                 .build();
 
         Product product = request.toEntity();
@@ -44,18 +42,16 @@ class MockProductServiceTest {
         Product savedProduct = mockProductRepository.save(product);
 
         assertThat(savedProduct.getName()).isEqualTo(product.getName());
-        assertThat(savedProduct.getCategory().getName()).isEqualTo(product.getCategory().getName());
+        assertThat(savedProduct.getCategory()).isEqualTo(product.getCategory());
     }
 
     @Test
     @DisplayName(value = "수정 요청")
     void modifiedProductTest() {
-        CategoryCreateRequest createRequest = GetCategoryInfo.getCreateRequest();
-        Category category = createRequest.toEntity();
 
         ProductCreateRequest req = ProductCreateRequest.builder()
                 .name("initName")
-                .category(category)
+                .category(Category.ETC)
                 .build();
 
         Product product = req.toEntity();
@@ -65,24 +61,22 @@ class MockProductServiceTest {
 
         ProductModifiedRequest modReq = ProductModifiedRequest.builder()
                 .name("newName")
-                .category(category)
+                .category(Category.COFFEE)
                 .build();
 
         savedProduct.modified(modReq);
 
         assertThat(savedProduct.getName()).isEqualTo(modReq.getName());
-        assertThat(savedProduct.getCategory().getName()).isEqualTo(category.getName());
+        assertThat(savedProduct.getCategory()).isEqualTo(Category.COFFEE);
     }
 
     @Test
     @DisplayName(value = "단일 조회")
     void findOneTest() {
-        CategoryCreateRequest createRequest = GetCategoryInfo.getCreateRequest();
-        Category category = createRequest.toEntity();
 
         ProductCreateRequest req = ProductCreateRequest.builder()
                 .name("initName")
-                .category(category)
+                .category(Category.ETC)
                 .build();
 
         Product product = req.toEntity();
@@ -99,12 +93,10 @@ class MockProductServiceTest {
     @Test
     @DisplayName(value = "전체 조회")
     void findAllTest() {
-        CategoryCreateRequest createRequest = GetCategoryInfo.getCreateRequest();
-        Category category = createRequest.toEntity();
 
         ProductCreateRequest req = ProductCreateRequest.builder()
                 .name("initName")
-                .category(category)
+                .category(Category.ETC)
                 .build();
 
         Product product = req.toEntity();
