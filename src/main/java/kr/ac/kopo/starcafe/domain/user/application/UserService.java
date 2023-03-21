@@ -1,5 +1,8 @@
 package kr.ac.kopo.starcafe.domain.user.application;
 
+import kr.ac.kopo.starcafe.domain.cart.model.Cart;
+import kr.ac.kopo.starcafe.domain.cart.model.application.CartService;
+import kr.ac.kopo.starcafe.domain.cart.model.repository.CartRepository;
 import kr.ac.kopo.starcafe.domain.user.error.AlreadyExpiredUserException;
 import kr.ac.kopo.starcafe.domain.user.error.UserNotFoundException;
 import kr.ac.kopo.starcafe.domain.user.model.User;
@@ -25,11 +28,15 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CartService cartService;
+
     public SimpleUserResponse create (final User user) {
         String encodePass = passwordEncoder.encode(user.getPassword());
         user.setEncodedPassword(encodePass);
 
         User savedUser = userRepository.save(user);
+
+        cartService.initCart(savedUser.getId());
 
         return SimpleUserResponse.of(savedUser);
     }
@@ -56,26 +63,5 @@ public class UserService {
         } else {
             throw new AlreadyExpiredUserException("이미 탈퇴된 유저입니다.");
         }
-    }
-
-    @Transactional(readOnly = true)
-    public SimpleUserResponse findUserInfo (final Long id) {
-        User findUser = userRepository.findById(id)
-                .orElseThrow( () -> new IllegalStateException("유저 정보를 불러올 수 없습니다."));
-
-        return SimpleUserResponse.of(findUser);
-    }
-
-    @Transactional(readOnly = true)
-    public SimpleUserResponse findMyInfo (final CustomUserDetails userDetails) {
-        User findUser = userRepository.findById(userDetails.getId())
-                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 유저입니다"));
-
-        return SimpleUserResponse.of(findUser);
-    }
-
-    @Transactional(readOnly = true)
-    public Page<SimpleUserResponse> findAll (final PageRequest pageRequest) {
-        return userRepository.findAll(pageRequest).map(SimpleUserResponse::of);
     }
 }

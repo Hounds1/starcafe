@@ -1,5 +1,6 @@
 package kr.ac.kopo.starcafe.domain.product.presentaion;
 
+import kr.ac.kopo.starcafe.domain.product.application.ProductReadService;
 import kr.ac.kopo.starcafe.domain.product.application.ProductService;
 import kr.ac.kopo.starcafe.domain.product.model.Product;
 import kr.ac.kopo.starcafe.domain.product.model.dto.ProductCreateRequest;
@@ -23,6 +24,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductReadService productReadService;
 
     @PostMapping("/products")
     public ResponseEntity<SimpleProductResponse> create(@RequestBody final ProductCreateRequest request) {
@@ -42,7 +44,7 @@ public class ProductController {
 
     @GetMapping("/products")
     public ResponseEntity<SimpleProductResponse> findOne(@RequestParam(value = "id") final Long id) {
-        return ResponseEntity.ok().body(productService.findOne(id));
+        return ResponseEntity.ok().body(productReadService.findOne(id));
     }
 
     @GetMapping("/products/all")
@@ -51,6 +53,6 @@ public class ProductController {
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id"));
 
-        return ResponseEntity.ok().body(productService.findAll(pageRequest));
+        return ResponseEntity.ok().body(productReadService.findAll(pageRequest));
     }
 }

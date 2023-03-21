@@ -51,6 +51,7 @@ public class SecurityConfig {
         http
                 .cors()
                 .configurationSource(corsConfigurationSource());
+
         http
                 .exceptionHandling()
                 .authenticationEntryPoint(securityAuthenticationEntryPoint)

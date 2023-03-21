@@ -1,5 +1,6 @@
 package kr.ac.kopo.starcafe.domain.user.model;
 
+import kr.ac.kopo.starcafe.domain.cart.model.Cart;
 import kr.ac.kopo.starcafe.domain.user.model.dto.Address;
 import kr.ac.kopo.starcafe.domain.user.model.dto.ModifiedUserRequest;
 import kr.ac.kopo.starcafe.domain.user.model.dto.RoleType;
@@ -33,6 +34,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
     private boolean activated;
 

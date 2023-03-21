@@ -13,10 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,20 +43,5 @@ public class ProductService {
     public void remove(final Long id) {
         Product product = productRepository.findById(id).orElseThrow(RuntimeException::new);
         productRepository.delete(product);
-    }
-
-    @Transactional(readOnly = true)
-    public SimpleProductResponse findOne(final Long id) {
-        Product findProduct = productRepository.findById(id).orElseThrow(RuntimeException::new);
-        ModelMapper mapper = customModelMapper.standardMapper();
-
-        return mapper.map(findProduct, SimpleProductResponse.class);
-    }
-
-    @Transactional(readOnly = true)
-    public Page<SimpleProductResponse> findAll(PageRequest pageRequest) {
-        Page<SimpleProductResponse> all = productRepository.findAll(pageRequest).map(SimpleProductResponse::of);
-
-        return all;
     }
 }
